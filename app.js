@@ -1,93 +1,75 @@
-console.log('hello world');
-
-console.log('ellho');
 let movementDisplay;
 let game;
 let hero;
 let ogre;
 let ctx;
+let speed;
+let friction;
+let shipObj = new Image();
 
 //Crawler Constructor function
-function Crawler(x, y, width, height, color) {
+function Crawler(x, y, width, height, image) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-    this.color = color;
+    this.image = image;
+    this.image.src = 'assets/ship.png';
     this.alive = true;
     this.render = function() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-}
-
-const detectHit = () => {
-    //check for collision on x axis
-    //if the hero's bottom value is > ogre's top value
-    if (hero.x + hero.width > ogre.x &&
-        hero.x < ogre.x + ogre.width &&
-        hero.y + hero.height > ogre.y &&
-        hero.y < ogre.y + ogre.height) 
-        {
-        ogre.alive = false;   
-        console.log('COLLISION!');
-    }
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        }
 }
 
 const gameLoop = () => {
     //clear the canvas
     ctx.clearRect(0, 0, game.width, game.height);
-    //display the x, y, coordinates of our hero onto the DOM
-    movementDisplay.textContent = `X:${hero.x}\nY:${hero.y}`;
-    //check if the ogre is alive and
+    scoreDisplay.textContent = `${hero.x}`;
+
+
     if(ogre.alive) {
-        //render the ogre
         ogre.render()
-        //check the collision
-        detectHit();
     }
-    //TODO detectHit()
-    //render the hero
     hero.render()
 }
 
 const movementHandler = e => {
     // console.log(e);
-    //when user presses w
-    //w: 87, a: 65, s: 83, d: 68
-    //look up velocity
-    switch (e.keyCode) {
-        case(87): //w up
-            if(hero.y > 0) hero.y -= 10
-            break;
-        case(83): //s down
-            if(hero.y + hero.height < game.height) hero.y +=10
-            break;
-        case(65): //a left
-            if(hero.x > 0) hero.x -= 10
-            break;
-        case(68): //d right
-            if(hero.x + hero.width < game.width) hero.x +=10
-            break;
+    // up: 38, left: 37, bottom: 40, right: 39,
+    function animate() {
+        speed = 2;
+        friction = 0.98;
+        switch (e.keyCode) {
+            case(37): //a left
+                if(hero.x > 0) hero.x -= 5;
+                break;
+            case(39): //d right
+                if(hero.x + hero.width < game.width) hero.x +=5;
+                break;
 
-        default: 
-            console.log('invalid keystroke');
+            default: 
+                console.log('invalid keystroke');
+        }
+        requestAnimationFrame(animate);
     }
+    animate();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     //DOM REFS
-    movementDisplay = document.getElementById('movement');
+    scoreDisplay = document.getElementById('score');
+    highScoreDisplay = document.getElementById('highScore');
     game = document.getElementById('game');
     
     //CANVAS CONFIG
-    game.setAttribute('height', 400);
-    game.setAttribute('width', 800);
+    game.setAttribute('height', 600);
+    game.setAttribute('width', 350);
     ctx = game.getContext('2d');
     
     //Character Refs
-    ogre = new Crawler(300,100, 80, 120, '#bada55');
-    hero = new Crawler(20, 100, 50, 50, 'hotpink');
+    ogre = new Crawler(130,100, 80, 120, shipObj);
+    hero = new Crawler(165, 550, 30, 30, shipObj);
+    console.log(hero);
 
     document.addEventListener('keydown', movementHandler);
     

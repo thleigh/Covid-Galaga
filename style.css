@@ -4,7 +4,7 @@ html,body {
   }
   
   body {
-    padding-top: 1em;
+    padding-top: 6em;
     text-align: center;
     background-color: black;
     /* background-image: url('../img/dungeonhell.png'); */
@@ -16,29 +16,30 @@ html,body {
     font-family: 'Press Start 2P', monospace;
     /* font-family: monospace; */
     color: goldenrod;
+    font-size: 15px;
+    margin: 1px;
   }
   
   canvas {
     /* background-image: url('../img/stone.png'); */
     /* background-repeat: repeat; */
     background-color: #222;
-    width: 100%;
-    height: 100;
+    width: 350px;
+    height: 600px;
   }
   
   #container {
-  max-width: 50em;
+  max-width: 350px;
   /* height: 70vh; */
-  background-color: rgb(111, 12, 32);
+  background-color: rgb(87, 2, 2);
   margin: 0 auto;
-  padding: 1em;
   display: grid;
-  grid-gap: 1em;
-  grid-template-rows: .25fr .5fr .25fr;
-  grid-template-columns: .25fr .5fr .25fr;
-  grid-template-areas: "top-left top-left top-right"
+  grid-gap: 0;
+  grid-template-rows: .05fr .90fr .05fr;
+  grid-template-columns: .2fr .60fr .20fr;
+  grid-template-areas: "top-left top-middle top-right"
                         "game game game"
-                        "btm-left btm-right btm-right";
+                        "btm-left btm-middle btm-right";
   }
   
   #top-left, #top-right, #btm-left, #btm-right {
@@ -54,8 +55,6 @@ html,body {
   
   #top-right {
     grid-area: top-right;
-    /* background-color: #222; */
-    /* background-image: url('../img/funky-lines.png'); */
   }
   
   main {
@@ -65,10 +64,9 @@ html,body {
   
   #btm-left {
     grid-area: btm-left;
-    /* background-color: #222; */
   }
   
   #btm-right {
     grid-area: btm-right;
-    /* background-color: #222; */
   }
+
