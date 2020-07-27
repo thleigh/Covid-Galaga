@@ -12,9 +12,7 @@ I finished this off with a "covid edition" at the top!
 One of my main goals is to make this game accessible for mobile, so creating a responsive webpage was a big emphasis for me.
 
 ![Image of my Overlay](./assets/galaga-overlay.png)
-<<<<<<< HEAD
 
 ### Day 2
 I  had a huge plan that I wanted to execute but it didn't go quite as planned. I had trouble adding a grid into my overlay and so instead, I made the grid first, using an older project game project that I waorked on with a pre-made grid to try to trouble-shoot it that way. 
-=======
->>>>>>> fef0cbefae437bcd5d39df76243701fddf9c11c0
+
