@@ -6,7 +6,7 @@ html,body {
   body {
     padding-top: 6em;
     text-align: center;
-    background-color: black;
+    background-color: white;
     /* background-image: url('../img/dungeonhell.png'); */
     background-size: cover;
     background-repeat: space;
@@ -31,12 +31,12 @@ html,body {
   #container {
   max-width: 350px;
   /* height: 70vh; */
-  background-color: rgb(87, 2, 2);
+  background-color: #222;
   margin: 0 auto;
   display: grid;
   grid-gap: 0;
   grid-template-rows: .05fr .90fr .05fr;
-  grid-template-columns: .2fr .60fr .20fr;
+  grid-template-columns: .25fr .5fr .25fr;
   grid-template-areas: "top-left top-middle top-right"
                         "game game game"
                         "btm-left btm-middle btm-right";
