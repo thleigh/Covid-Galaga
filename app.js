@@ -174,10 +174,14 @@ document.addEventListener('keyup', controller.keyListenerUp, false);
 
 score = document.getElementById('top-left');
 highScore = document.getElementById('top-middle');
-document.getElementById('startBtn').addEventListener('click', function () {
+title = document.getElementById('title');
+startBtn = document.getElementById('startBtn')
+startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
+    startBtn.style.display = 'none';
+    title.style.display = 'none';
 })
-    
 let runGame = setInterval(gameLoop, 60);
+    
 
