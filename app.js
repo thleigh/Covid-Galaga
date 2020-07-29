@@ -86,19 +86,18 @@ controller = {
 let missileTotal = 10;
 let missiles = [];
 
-
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
     // scoreDisplay.textContent = `${hero.x}`;
     scoreDisplay.textContent = '1000';
 
     if (controller.left && hero.x > 0) {
-        xVel -= 4;
+        xVel -= 5;
         hero.x += xVel;
         xVel *= 0.2;
     }
     if (controller.right && hero.x + hero.width < game.width) {
-        xVel += 4;
+        xVel += 5;
         hero.x += xVel;
         xVel *= 0.2;
     }
@@ -128,10 +127,29 @@ const moveMissile = () => {
     }
 }
 
+let Button = function(x, y, width, height, imgurl, fn) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.img = new Image();
+    this.img.src = imgurl;
+    this.fn = fn;
+};
+
+Button.prototype.mouseDown = function(mouseX, mouseY) {
+    let hit //
+    if(hit == true) {
+        fn();
+    }
+    return hit;
+};
+
 //DOM REFS
 scoreDisplay = document.getElementById('score');
 highScoreDisplay = document.getElementById('highScore');
 game = document.getElementById('game');
+
     
 //CANVAS CONFIG
 game.setAttribute('height', 600);
@@ -153,6 +171,13 @@ missile.src = 'assets/missile.png'
 
 document.addEventListener('keydown', controller.keyListenerDown, false);
 document.addEventListener('keyup', controller.keyListenerUp, false);
+
+score = document.getElementById('top-left');
+highScore = document.getElementById('top-middle');
+document.getElementById('startBtn').addEventListener('click', function () {
+    score.style.display = 'block';
+    highScore.style.display = 'block';
+})
     
 let runGame = setInterval(gameLoop, 60);
 

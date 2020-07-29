@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Covid-Galaga</title>
+    <title>Galaga</title>
 </head>
 <body>
     <div id="overlay">
         <!-- <img src="assets/galaga-overlay.png" alt="overlay"> -->
 
+        
         <div id="container">
             <aside id="top-left"><h2 id="score"></h2></aside>
             <aside id="top-right"><h2></h2></aside>
             <aside id="top-middle"><h2 id="highScore">HIGH SCORE</h2></aside>
             <main>
+                <img src="assets/galaga-title.png" alt="title" id="title" height="50%" width="50%">
+                <button type="button" id="startBtn" onclick="gameLoop()">
+                    START
+                </button>
                 <canvas id="game" class="background"></canvas>
             </main>
             <aside id="btm-middle"><h2></h2></aside>

@@ -12,10 +12,14 @@ html,body {
     background-repeat: space;
   }
   
+  #highScore {
+      color: red;
+  }
+
   h1, h2 {
     font-family: 'Press Start 2P', monospace;
     /* font-family: monospace; */
-    color: goldenrod;
+    color: white;
     font-size: 15px;
     margin: 1px;
   }
@@ -26,6 +30,34 @@ html,body {
     background-color: black;
     width: 350px;
     height: 600px;
+  }
+  
+  #title {
+    border: none;
+    background: none;
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%)
+  }
+
+#startBtn {
+    border: none;
+    background: none;
+    font-family: 'Press Start 2P', monospace;
+    color: rgb(36, 255, 47);
+    font-size: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+  }
+  #startBtn:focus {outline:0;}
+
+  #startBtn:hover {
+    color: rgb(0, 185, 0);
   }
   
   #container {
@@ -47,26 +79,31 @@ html,body {
     justify-content: center;
     align-items: center;
     background-color: rgb(255,255,255 0);
-  }
-  
-  #top-left {
+}
+
+#top-left {
+    padding-top: 20px;
     grid-area: top-left;
-  }
-  
-  #top-right {
+    display: none;
+}
+#top-middle {
+    display: none;
+}
+
+#top-right {
     grid-area: top-right;
-  }
-  
-  main {
+}
+
+main {
     grid-area: game;
-  }
-  
-  
-  #btm-left {
+}
+    
+    
+#btm-left {
     grid-area: btm-left;
-  }
+}
   
-  #btm-right {
+#btm-right {
     grid-area: btm-right;
-  }
+}
 
