@@ -2,7 +2,7 @@ let movementDisplay;
 let game;
 let spriteNames = ['hero', 'missile', 'enemy1'];
 let hero;
-// let missile;
+let missile;
 let ctx;
 let xVel = 0;
 let yVel = 0;
@@ -28,25 +28,42 @@ controller = {
     rigth: false,
     shoot: false,
 
-    keyListener: function(e) {
+    keyListenerDown: function(e) {
             let key_state = (event.type == "keydown")?true:false;
-
+            
         switch (e.keyCode) {
             case(37):
                 controller.left = key_state;
-                e.preventDefault();
+                console.log(key_state)
                 break;
             case(39):
                 controller.right = key_state;
-                e.preventDefault();
                 break;
             case(32):
                 controller.shoot = key_state;
-                e.preventDefault();
             default:
         }
+    },
+
+    keyListenerUp: function(e) {
+        let key_state = (event.type == "keyup")?false:true;
+        
+    switch (e.keyCode) {
+        case(37):
+            controller.left = key_state;
+            break;
+        case(39):
+            controller.right = key_state;
+            break;
+        case(32):
+            controller.shoot = key_state;
+        default:
     }
+}
 };
+
+let missileTotal = 10;
+let missiles = [];
 
 
 const gameLoop = () => {
@@ -55,51 +72,44 @@ const gameLoop = () => {
     scoreDisplay.textContent = '1000';
 
     if (controller.left && hero.x > 0) {
-        xVel -= 0.6;
+        xVel -= 4;
         hero.x += xVel;
-        xVel *= 0.9;
+        xVel *= 0.2;
     }
     if (controller.right && hero.x + hero.width < game.width) {
-        xVel += 0.6;
+        xVel += 4;
         hero.x += xVel;
-        xVel *= 0.9;
+        xVel *= 0.2;
     }
-
     hero.render();
+    moveMissile();
+    drawMissile();
 
-    if (controller.shoot) {
-        shoot();
-    }            
+    if (controller.shoot && missiles.length <= missileTotal) {
+        missiles.push([hero.x + 20, hero.y - 20, 5, 15])
+    }  
 }
- 
-function Missile () {
-    this.x = hero.x + 15;
-    this.y = 535;
+
+const drawMissile = () => {
+    if(missiles.length) 
+    for(let i = 0; i < missiles.length; i++) {
+        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+    }
 }
-Missile.prototype.draw = function(newX, newY) {
-    ctx.clearRect(this.x-5, this.y-5, 600, 20);
-    newX = newX || this.x;
-    newY = newY || this.y;
-    this.x = newX; 
-    this.y = newY;
-    let missile = this;
-    ctx.beginPath();
-    ctx.arc(missile.x, missile.y, 4, 0, Math.PI*2, false);
-    ctx.fillStyle = 'yellow';
-    ctx.fill();
-    ctx.closePath();
+
+const moveMissile = () => {
+    for(let i = 0; i < missiles.length; i++) {
+        if(missiles[i][1] > -11) {
+            missileShoot(i);
+            // missiles[i][1] -= 15;
+        } else if (missiles[i][1] < -10) {
+            missiles.splice(i, 1);
+        }
+    }
 }
-Missile.prototype.shootUp = function () {
-    let missile = this;
-    inter = setInterval(function () {
-        if(missile.x <=0) clearInterval(inter);
-        missile.draw(missile.x, missile.y - 15);
-    }, 10);
-}
-function shoot() {
-    let currentMissile = new Missile();
-    currentMissile.draw();
-    currentMissile.shootUp();
+const missileShoot = (i) => {
+    missiles[i][1] -= 15;
+    setTimeout(moveMissile, 1000);
 }
 
 //DOM REFS
@@ -120,11 +130,12 @@ sprites.hero.src = 'assets/ship.png'
 sprites.missile.src = 'assets/missile.png'
 
 //Character Refs
-ogre = new Crawler(500, 400, 100, 100, sprites.hero.src) 
 hero = new Crawler(165, 550, 30, 30, sprites.hero.src);
-missile = new Crawler(165, 520, 5, 12, sprites.missile.src);
+missile = new Image();
+missile.src = 'assets/missile.png'
+// missile = new Crawler(165, 520, 5, 12, sprites.missile.src);
 
-document.addEventListener('keydown', controller.keyListener);
-document.addEventListener('keyup', controller.keyListener);
+document.addEventListener('keydown', controller.keyListenerDown, false);
+document.addEventListener('keyup', controller.keyListenerUp, false);
     
-let runGame = setInterval(gameLoop, 30);
+let runGame = setInterval(gameLoop, 60);
