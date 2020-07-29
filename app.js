@@ -9,10 +9,31 @@ let yVel = 0;
 let controller;
 let loop;
 
+let bg = new Image();
+bg.src = 'assets/bg.png';
+
+window.onload = function() {
+    let bgHeight = 0;
+    let scrollSpeed =  1;
+
+    function loop () {
+        ctx.drawImage(bg, 0, bgHeight);
+        ctx.drawImage(bg, 0, bgHeight - game.height);
+        ctx.globalCompositeOperation='destination-over';
+        bgHeight += scrollSpeed;
+
+        if (bgHeight == game.height)
+            bgHeight = 0;
+
+        window.requestAnimationFrame(loop);
+    }
+    loop();
+}
+
 //Crawler Constructor function
 function Crawler(x, y, width, height, image) {
     this.image = new Image();
-    this.image.src = image;
+    this.image.src = image
     this.x = x;
     this.y = y;
     this.width = width;
@@ -90,26 +111,21 @@ const gameLoop = () => {
     }  
 }
 
-const drawMissile = () => {
-    if(missiles.length) 
-    for(let i = 0; i < missiles.length; i++) {
+function drawMissile() {
+        if(missiles.length)
+        for(let i = 0; i < missiles.length; i++) {
         ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
-    }
+        }
 }
 
-const moveMissile = () => {
+const moveMissile = () => { 
     for(let i = 0; i < missiles.length; i++) {
         if(missiles[i][1] > -11) {
-            missileShoot(i);
-            // missiles[i][1] -= 15;
+            missiles[i][1] -= 15;
         } else if (missiles[i][1] < -10) {
             missiles.splice(i, 1);
         }
     }
-}
-const missileShoot = (i) => {
-    missiles[i][1] -= 15;
-    setTimeout(moveMissile, 1000);
 }
 
 //DOM REFS
@@ -139,3 +155,4 @@ document.addEventListener('keydown', controller.keyListenerDown, false);
 document.addEventListener('keyup', controller.keyListenerUp, false);
     
 let runGame = setInterval(gameLoop, 60);
+
