@@ -1,10 +1,9 @@
 let movementDisplay;
 let game;
-let spriteNames = ['hero', 'missile', 'enemy2'];
-let enemy;
-let hero;
+let spriteNames = ['hero', 'missile', 'enemy', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7', 'enemy8'];
 let missile;
 let ctx;
+let hero;
 let xVel = 0;
 let yVel = 0;
 let controller;
@@ -56,7 +55,6 @@ controller = {
         switch (e.keyCode) {
             case(37):
                 controller.left = key_state;
-                console.log(key_state)
                 break;
             case(39):
                 controller.right = key_state;
@@ -86,14 +84,27 @@ controller = {
 
 let missileTotal = 10;
 let missiles = [];
-let enemies = [];
-let enemyTotal = 8;
 
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
     // scoreDisplay.textContent = `${hero.x}`;
     scoreDisplay.textContent = '1000';
 
+    moveHero();
+
+    shootMissile();
+
+    if(start) {
+        setTimeout(function() {
+            moveEnemy();
+            moveEnemy2();
+            moveEnemy4();
+            moveEnemy5();
+        }, 3000);
+    }
+}
+
+function moveHero() {
     if (controller.left && hero.x > 0) {
         xVel -= 6;
         hero.x += xVel;
@@ -105,38 +116,6 @@ const gameLoop = () => {
         xVel *= 0.2;
     }
     hero.render();
-    moveMissile();
-    drawMissile();
-    drawEnemy();
-    moveEnemy();
-
-    if(controller.shoot && enemies.length <= enemyTotal) {
-        enemies.push([0, 400, 20, 20])
-    }
-
-    if (controller.shoot && missiles.length <= missileTotal) {
-        missiles.push([hero.x + 20, hero.y - 20, 5, 15])
-    }  
-}
-
-let setUp = true;
-
-function drawEnemy() {
-    if(enemies.length)
-        for(let i =0; i < enemies.length; i++) {
-            ctx.drawImage(enemy, enemies[i][0], enemies[i][1], enemies[i][2], enemies[i][3]);
-    }
-}
-
-function moveEnemy() {
-    for(let i = 0; i < missiles.length; i++) {
-        if(enemies[i][1] > -11) {
-            // enemies[i][1] += 5;
-            enemies[i][1] -= 5;
-        } else if (enemies[i][1] < -10) {
-            enemies.splice(i,1);
-        }
-    }
 }
 
 function drawMissile() {
@@ -144,6 +123,14 @@ function drawMissile() {
             for(let i = 0; i < missiles.length; i++) {
             ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
         }
+}
+
+function shootMissile() {
+    moveMissile();
+    drawMissile();
+    if (controller.shoot && missiles.length <= missileTotal) {
+        missiles.push([hero.x + 20, hero.y - 20, 5, 15])
+    }  
 }
 
 const moveMissile = () => { 
@@ -172,13 +159,24 @@ for (let i = 0; i < spriteNames.length; i++) {
     sprites[spriteNames[i]] = new Image();
 }
 sprites.hero.src = 'assets/ship.png'
+sprites.enemy.src = 'assets/enemy2.png'
 sprites.enemy2.src = 'assets/enemy2.png'
+sprites.enemy3.src = 'assets/enemy3.png'
+sprites.enemy4.src = 'assets/enemy2.png'
+sprites.enemy5.src = 'assets/enemy2.png'
+sprites.enemy6.src = 'assets/enemy3.png'
 
 //Character Refs
 hero = new Crawler(165, 550, 30, 30, sprites.hero.src);
+enemy = new Crawler(-10, 400, 20, 20, sprites.enemy.src);
+enemy2 = new Crawler(-50, 450, 20, 20, sprites.enemy2.src);
+enemy3 = new Crawler(120, -20, 20, 20, sprites.enemy3.src);
+enemy4 = new Crawler(310, 400, 20, 20, sprites.enemy.src);
+enemy5 = new Crawler(350, 450, 20, 20, sprites.enemy2.src);
+enemy6 = new Crawler(200, -20, 20, 20, sprites.enemy3.src);
 
-enemy = new Image();
-enemy.src = 'assets/enemy2.png'
+// enemy = new Image();
+// enemy.src = 'assets/enemy2.png'
 missile = new Image();
 missile.src = 'assets/missile.png'
 
@@ -190,49 +188,63 @@ highScore = document.getElementById('top-middle');
 title = document.getElementById('title');
 startBtn = document.getElementById('startBtn')
 instructions = document.getElementById('instructions');
-startBtn.addEventListener('click', function () {
+let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
     startBtn.style.display = 'none';
     title.style.display = 'none';
     instructions.style.display = 'none';
-
-        // setInterval(function() {
-        //     drawEnemy();
-        // }, 10);
+    start = true;
 })
 let runGame = setInterval(gameLoop, 60);
 
+//width: 350, height: 600;
 
-// let x = 250;
-// let y = 250;
+function moveEnemy() {
+    enemy.render()
+    if(enemy.x < 140)
+        enemy.x += 8;
+    if(enemy.y > 40)
+        enemy.y -= 8;
+    else if(enemy.y <= 40)
+    enemy.y -= 0.5;
 
-// let srcX;
-// let srcY;
+    enemy3.render()
+    if(enemy.y < 15)
+        enemy3.y += 7;
+}
 
-// let sheetWidth = 800
-// let sheetHeight = 600;
+function moveEnemy2() {
+    enemy2.render()
+    if(enemy2.x < 100)
+        enemy2.x += 8;
+    if(enemy2.y > 40)
+        enemy2.y -= 8;
+    else if(enemy2.y <= 40)
+        enemy2.y -= 0.5;
+}
 
-// let cols = 8;
+function moveEnemy4() {
+    enemy4.render()
+    if(enemy4.x > 180)
+        enemy4.x -= 8;
+    if(enemy4.y > 40)
+        enemy4.y -= 8;
+    else if(enemy4.y <= 40)
+    enemy4.y -= 0.5;
 
-// let width = sheetWidth/cols;
-// let height = sheetHeight;
-
-// let currentFrame = 0;
-
-// let enemy = new Image ();
-// enemy.src = 'assets/enemy1.png';
-
-// function updateFrame() {
-//     currentFrame = ++currentFrame%cols; // 1 % 8 = 1, 2 % 8 = 2. 8 % 8 = 1,
-//     srcX = currentFrame * width;
-//     srcY = 0;
-//     ctx.clearRect(x, y, width, height);
-// }
-
-// function drawEnemy() {
-//     updateFrame();
-//     ctx.drawImage(enemy, srcX, srcY, width, height, x, y, width, height);
-// }
+    enemy6.render()
+    if(enemy4.y < 15)
+        enemy6.y += 7;
+}
 
 
+function moveEnemy5() {
+    enemy5.render()
+    if(enemy5.x > 220)
+        enemy5.x -= 8;
+    if(enemy5.y > 40)
+        enemy5.y -= 8;
+    else if(enemy5.y <= 40)
+        enemy5.y -= 0.5;
+}
