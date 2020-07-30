@@ -8,16 +8,17 @@
     <title>Galaga</title>
 </head>
 <body>
+    
     <div id="overlay">
-        <!-- <img src="assets/galaga-overlay.png" alt="overlay"> -->
-
+        <!-- <img src="assets/galaga-overlay.png" alt="overlay" id="overlayImg"> -->
+        <img src="assets/galaga-title.png" alt="title" id="title" class="titleC">
+        <img src="assets/instructions.png" alt="instructions" id="instructions" class="instructionsC">
         
-        <div id="container">
+        <div id="container" >
             <aside id="top-left"><h2 id="score"></h2></aside>
             <aside id="top-right"><h2></h2></aside>
             <aside id="top-middle"><h2 id="highScore">HIGH SCORE</h2></aside>
             <main>
-                <img src="assets/galaga-title.png" alt="title" id="title" height="50%" width="50%">
                 <button type="button" id="startBtn" onclick="gameLoop()">
                     START
                 </button>
@@ -27,7 +28,6 @@
             <aside id="btm-left"><h2 id="lives"></h2></aside>
             <aside id="btm-right"><h2 id="status"></h2></aside>
         </div>
-
     </div>
 
     <script src="app.js"></script>

@@ -60,7 +60,7 @@ controller = {
             case(39):
                 controller.right = key_state;
                 break;
-            case(32):
+            case(90):
                 controller.shoot = key_state;
             default:
         }
@@ -176,11 +176,13 @@ score = document.getElementById('top-left');
 highScore = document.getElementById('top-middle');
 title = document.getElementById('title');
 startBtn = document.getElementById('startBtn')
+instructions = document.getElementById('instructions');
 startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
     startBtn.style.display = 'none';
     title.style.display = 'none';
+    instructions.style.display = 'none';
 })
 let runGame = setInterval(gameLoop, 60);
     
