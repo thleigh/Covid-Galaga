@@ -6,13 +6,49 @@ Welcome to Covid-19 Galaga! Growing up, I have always had the priviledge of bein
 With that being said, I wanted to challenge myself and make my own version of Galaga as a game project for myeahy General Assembly bootcamp. Additionally, I wanted to make it relevant with the times (2020). At the moment, we are not fighting alien invaders, however, we are fighting a deadly virus. 
 So join along in my journey of recreating my childhood and maybe yours too!
 
-### Day 1
+### Step 1
 The first step into the journey of my project was making the overlay to my game. I have immense experience with Adobe Photoshop so this came easy. I found all of the assets for my overlay and constructed a png with a classic Galaga design.
 I finished this off with a "covid edition" at the top!
 One of my main goals is to make this game accessible for mobile, so creating a responsive webpage was a big emphasis for me.
 
 ![Image of my Overlay](./assets/galaga-overlay.png)
 
-### Day 2
-I  had a huge plan that I wanted to execute but it didn't go quite as planned. I had trouble adding a grid into my overlay and so instead, I made the grid first, using an older project game project that I waorked on with a pre-made grid to try to trouble-shoot it that way. 
+### Step 2
+I had a huge plan that I wanted to execute but it didn't go quite as planned. I had trouble adding a grid into my overlay and so instead, I made the grid first, using an older canvas game that I worked on with a pre-made grid to try to trouble-shoot it that way. After successfully making my game grid, I was finally able to add on a new overlay that was edited to fit the canvas. After that I created a start menu using HTML and an event listener!
+
+![Image of my Overlay](./assets/galaga-ss1.png)
+
+### Step 3
+In life, I always wished there was just one answer to my problems. In the same way, I wish there was one code to solve my coding problems. Hoevever, code is GREAT in that there are so many different ways to do the same thing. That is both a sarcastic statement and one of optimism. It's great knowing that I don't have to stick to one way of thinking!
+My next step was probably the most challenging: creating the game mechanics. 
+It took me about 5 hours to figure out/Googling (the problem with using Google is that there are a lot of answers. Too many sometimes. It's important to understand the concept of their code rather than just copying and pasting it because it won't necessarily work in your javascript) the right way to code a shooting function and another 2 hours unsuccessfully trying to reduce the fire rate. Below is part of the code that allowed me to execute it.
+
+```javascript
+    let missileTotal = 10;
+    let missiles = [];
+
+        if (controller.shoot && missiles.length <= missileTotal) {
+        missiles.push([hero.x + 20, hero.y - 20, 5, 15])
+    }  
+
+    function drawMissile() {
+        if(missiles.length)
+        for(let i = 0; i < missiles.length; i++) {
+        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+        }
+    }
+
+    const moveMissile = () => { 
+        for(let i = 0; i < missiles.length; i++) {
+            if(missiles[i][1] > -11) {
+                missiles[i][1] -= 15;
+            } else if (missiles[i][1] < -10) {
+                missiles.splice(i, 1);
+            }
+        }
+    }
+
+    missile = new Image();
+    missile.src = 'assets/missile.png'  
+```
 

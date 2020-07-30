@@ -76,7 +76,7 @@ controller = {
         case(39):
             controller.right = key_state;
             break;
-        case(32):
+        case(90):
             controller.shoot = key_state;
         default:
     }
