@@ -1,6 +1,7 @@
 let movementDisplay;
 let game;
-let spriteNames = ['hero', 'missile', 'enemy1'];
+let spriteNames = ['hero', 'missile', 'enemy2'];
+let enemy;
 let hero;
 let missile;
 let ctx;
@@ -85,6 +86,8 @@ controller = {
 
 let missileTotal = 10;
 let missiles = [];
+let enemies = [];
+let enemyTotal = 8;
 
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
@@ -104,16 +107,42 @@ const gameLoop = () => {
     hero.render();
     moveMissile();
     drawMissile();
+    drawEnemy();
+    moveEnemy();
+
+    if(controller.shoot && enemies.length <= enemyTotal) {
+        enemies.push([0, 400, 20, 20])
+    }
 
     if (controller.shoot && missiles.length <= missileTotal) {
         missiles.push([hero.x + 20, hero.y - 20, 5, 15])
     }  
 }
 
+let setUp = true;
+
+function drawEnemy() {
+    if(enemies.length)
+        for(let i =0; i < enemies.length; i++) {
+            ctx.drawImage(enemy, enemies[i][0], enemies[i][1], enemies[i][2], enemies[i][3]);
+    }
+}
+
+function moveEnemy() {
+    for(let i = 0; i < missiles.length; i++) {
+        if(enemies[i][1] > -11) {
+            // enemies[i][1] += 5;
+            enemies[i][1] -= 5;
+        } else if (enemies[i][1] < -10) {
+            enemies.splice(i,1);
+        }
+    }
+}
+
 function drawMissile() {
         if(missiles.length)
-        for(let i = 0; i < missiles.length; i++) {
-        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+            for(let i = 0; i < missiles.length; i++) {
+            ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
         }
 }
 
@@ -143,10 +172,13 @@ for (let i = 0; i < spriteNames.length; i++) {
     sprites[spriteNames[i]] = new Image();
 }
 sprites.hero.src = 'assets/ship.png'
-sprites.missile.src = 'assets/missile.png'
+sprites.enemy2.src = 'assets/enemy2.png'
 
 //Character Refs
 hero = new Crawler(165, 550, 30, 30, sprites.hero.src);
+
+enemy = new Image();
+enemy.src = 'assets/enemy2.png'
 missile = new Image();
 missile.src = 'assets/missile.png'
 
@@ -164,7 +196,43 @@ startBtn.addEventListener('click', function () {
     startBtn.style.display = 'none';
     title.style.display = 'none';
     instructions.style.display = 'none';
+
+        // setInterval(function() {
+        //     drawEnemy();
+        // }, 10);
 })
 let runGame = setInterval(gameLoop, 60);
-    
+
+
+// let x = 250;
+// let y = 250;
+
+// let srcX;
+// let srcY;
+
+// let sheetWidth = 800
+// let sheetHeight = 600;
+
+// let cols = 8;
+
+// let width = sheetWidth/cols;
+// let height = sheetHeight;
+
+// let currentFrame = 0;
+
+// let enemy = new Image ();
+// enemy.src = 'assets/enemy1.png';
+
+// function updateFrame() {
+//     currentFrame = ++currentFrame%cols; // 1 % 8 = 1, 2 % 8 = 2. 8 % 8 = 1,
+//     srcX = currentFrame * width;
+//     srcY = 0;
+//     ctx.clearRect(x, y, width, height);
+// }
+
+// function drawEnemy() {
+//     updateFrame();
+//     ctx.drawImage(enemy, srcX, srcY, width, height, x, y, width, height);
+// }
+
 
