@@ -15,6 +15,30 @@ One of my main goals is to make this game accessible for mobile, so creating a r
 
 ### Step 2
 I had a huge plan that I wanted to execute but it didn't go quite as planned. I had trouble adding a grid into my overlay and so instead, I made the grid first, using an older canvas game that I worked on with a pre-made grid to try to trouble-shoot it that way. After successfully making my game grid, I was finally able to add on a new overlay that was edited to fit the canvas. After that I created a start menu using HTML and an event listener!
+A highlight for this step was creating a never-ending panning background using requestAnimationFrame! Below is the code for that.
+
+```javascript
+    let bg = new Image();
+    bg.src = 'assets/bg.png';
+
+    window.onload = function() {
+        let bgHeight = 0;
+        let scrollSpeed =  1;
+
+        function loop () {
+            ctx.drawImage(bg, 0, bgHeight);
+            ctx.drawImage(bg, 0, bgHeight - game.height);
+            ctx.globalCompositeOperation='destination-over';
+            bgHeight += scrollSpeed;
+
+            if (bgHeight == game.height)
+                bgHeight = 0;
+
+            window.requestAnimationFrame(loop);
+        }
+        loop();
+    }
+```
 
 ![Image of my Overlay](./assets/galaga-ss1.png)
 

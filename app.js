@@ -92,12 +92,12 @@ const gameLoop = () => {
     scoreDisplay.textContent = '1000';
 
     if (controller.left && hero.x > 0) {
-        xVel -= 5;
+        xVel -= 6;
         hero.x += xVel;
         xVel *= 0.2;
     }
     if (controller.right && hero.x + hero.width < game.width) {
-        xVel += 5;
+        xVel += 6;
         hero.x += xVel;
         xVel *= 0.2;
     }
@@ -127,24 +127,6 @@ const moveMissile = () => {
     }
 }
 
-let Button = function(x, y, width, height, imgurl, fn) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.img = new Image();
-    this.img.src = imgurl;
-    this.fn = fn;
-};
-
-Button.prototype.mouseDown = function(mouseX, mouseY) {
-    let hit //
-    if(hit == true) {
-        fn();
-    }
-    return hit;
-};
-
 //DOM REFS
 scoreDisplay = document.getElementById('score');
 highScoreDisplay = document.getElementById('highScore');
@@ -167,7 +149,6 @@ sprites.missile.src = 'assets/missile.png'
 hero = new Crawler(165, 550, 30, 30, sprites.hero.src);
 missile = new Image();
 missile.src = 'assets/missile.png'
-// missile = new Crawler(165, 520, 5, 12, sprites.missile.src);
 
 document.addEventListener('keydown', controller.keyListenerDown, false);
 document.addEventListener('keyup', controller.keyListenerUp, false);
