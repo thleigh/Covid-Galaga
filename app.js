@@ -9,6 +9,7 @@ let yVel = 0;
 let controller;
 let loop;
 
+//creates a looping background
 let bg = new Image();
 bg.src = 'assets/bg.png';
 
@@ -99,6 +100,7 @@ function gameLoop() {
     detectMissileHit();
 }
 
+//moves ship on the X-axis
 function moveHero() {
     if (controller.left && hero.x > 0) {
         xVel -= 6;
@@ -118,6 +120,7 @@ let missiles = [];
 let scoreTotal = 0;
 let missileSize = 15;
 
+//creates the missile
 function drawMissile() {
     if(missiles.length)
         for(let i = 0; i < missiles.length; i++) {
@@ -125,6 +128,7 @@ function drawMissile() {
     }
 }
 
+//hit detection
 function detectMissileHit() {
     for(let i = 0; i < missiles.length; i++) {
         for(let e = enemies.length - 1; e >= 0; e--) {
@@ -132,8 +136,10 @@ function detectMissileHit() {
         let differenceX = Math.abs(enemies[e].x - missiles[i][0]);
         //returns the absolute value of the enemy's height - the missile's height
         let differenceY = Math.abs(enemies[e].y - missiles[i][1]);
-        let dist = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
-            if(dist < (enemySize + missileSize) / 2)  {
+        //takes the center points of the two, making sure the distance between the two objects are less than the two added together.
+        //https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+        let distance = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
+            if(distance < (enemySize + missileSize) / 2)  {
                 enemies.splice(e, 1);
                 scoreTotal += 100;
                 // oof.play();
@@ -202,6 +208,7 @@ let oof = new Audio('assets/oof.mp4');
 let laser = new Audio('assets/missleSfx.mp4');
 intro.volume = 0.3;
 
+//when start button is clicked
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
@@ -213,6 +220,7 @@ let start = startBtn.addEventListener('click', function () {
     let spawnInterval = setInterval(spawn, 1000);
 });
 
+//when try again button is clicked
 function end() {
     tryAgainBtn.addEventListener('click', function() {
     gameOver();
@@ -238,21 +246,23 @@ let enemySize = 25;
 let speed = 5;
 
 function spawn() {
+    //places the enemy in the array with an random x value.
     enemies.push({x:Math.random()*game.width, y:-20});
 };
 
+//creates the enemies
 function drawEnemy() {
     for(let i = 0; i < enemies.length; i++) {
         enemies[i].y += speed;
-        ctx.drawImage(enemy, enemies[i].x - enemySize/2, enemies[i].y - enemySize/2, enemySize, enemySize);
+        ctx.drawImage(enemy, enemies[i].x, enemies[i].y, enemySize, enemySize);
         
         //detects distance
         let differenceX = Math.abs(enemies[i].x - hero.x);
         let differenceY = Math.abs(enemies[i].y - hero.y);
-        let dist = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
+        let distance = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
         
         //detects hit
-        if(dist < (hero.height + enemySize)/2 || hero.x < -10 || hero.x > 350
+        if(distance < (hero.height + enemySize)/2 || hero.x < -10 || hero.x > 350
         || hero.y < 0 || hero.y > 600)  {
             enemies = [];
             hero.x = 150;
@@ -262,7 +272,6 @@ function drawEnemy() {
             highScore.style.display = 'none';
             oof.play();
             start = false;
-
         }
     }   
 }
