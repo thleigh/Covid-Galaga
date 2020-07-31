@@ -200,7 +200,7 @@ tryAgainBtn = document.getElementById('tryAgain');
 let intro = new Audio('assets/galaga-intro.mp4');
 let oof = new Audio('assets/oof.mp4');
 let laser = new Audio('assets/missleSfx.mp4');
-intro.volume = 0.5;
+intro.volume = 0.3;
 
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
