@@ -1,6 +1,6 @@
 let movementDisplay;
 let game;
-let spriteNames = ['hero', 'missile', 'enemy', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7', 'enemy8'];
+let spriteNames = ['hero', 'missile'];
 let missile;
 let ctx;
 let hero;
@@ -82,28 +82,17 @@ controller = {
 }
 };
 
-let missileTotal = 10;
-let missiles = [];
-
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
-    // scoreDisplay.textContent = `${hero.x}`;
-    scoreDisplay.textContent = '1000';
-
+    // highScoreDisplay.textContent = `${hero.x}`;
+    scoreDisplay.textContent = '0';
+    
     moveHero();
 
     shootMissile();
 
-    if(start) {
-        setTimeout(function() {
-            moveEnemy();
-            moveEnemy2();
-            moveEnemy4();
-            moveEnemy5();
-        }, 3000);
-    }
+    drawEnemy();
 }
-
 function moveHero() {
     if (controller.left && hero.x > 0) {
         xVel -= 6;
@@ -118,6 +107,9 @@ function moveHero() {
     hero.render();
 }
 
+let missileTotal = 10;
+let missiles = [];
+
 function drawMissile() {
         if(missiles.length)
             for(let i = 0; i < missiles.length; i++) {
@@ -128,19 +120,23 @@ function drawMissile() {
 function shootMissile() {
     moveMissile();
     drawMissile();
+
     if (controller.shoot && missiles.length <= missileTotal) {
         missiles.push([hero.x + 20, hero.y - 20, 5, 15])
     }  
 }
 
 const moveMissile = () => { 
-    for(let i = 0; i < missiles.length; i++) {
-        if(missiles[i][1] > -11) {
-            missiles[i][1] -= 15;
-        } else if (missiles[i][1] < -10) {
-            missiles.splice(i, 1);
+    // let missileInterval = setInterval(() => {
+        for(let i = 0; i < missiles.length; i++) {
+            if(missiles[i][1] > -11) {
+                missiles[i][1] -= 5;
+                
+            } else if (missiles[i][1] < -10) {
+                missiles.splice(i, 1);
+            }
         }
-    }
+    // }, 100)
 }
 
 //DOM REFS
@@ -159,35 +155,24 @@ for (let i = 0; i < spriteNames.length; i++) {
     sprites[spriteNames[i]] = new Image();
 }
 sprites.hero.src = 'assets/ship.png'
-sprites.enemy.src = 'assets/enemy2.png'
-sprites.enemy2.src = 'assets/enemy2.png'
-sprites.enemy3.src = 'assets/enemy3.png'
-sprites.enemy4.src = 'assets/enemy2.png'
-sprites.enemy5.src = 'assets/enemy2.png'
-sprites.enemy6.src = 'assets/enemy3.png'
 
 //Character Refs
 hero = new Crawler(165, 550, 30, 30, sprites.hero.src);
-enemy = new Crawler(-10, 400, 20, 20, sprites.enemy.src);
-enemy2 = new Crawler(-50, 450, 20, 20, sprites.enemy2.src);
-enemy3 = new Crawler(120, -20, 20, 20, sprites.enemy3.src);
-enemy4 = new Crawler(310, 400, 20, 20, sprites.enemy.src);
-enemy5 = new Crawler(350, 450, 20, 20, sprites.enemy2.src);
-enemy6 = new Crawler(200, -20, 20, 20, sprites.enemy3.src);
 
-// enemy = new Image();
-// enemy.src = 'assets/enemy2.png'
+enemy = new Image();
+enemy.src = 'assets/enemy3.png'
 missile = new Image();
 missile.src = 'assets/missile.png'
 
 document.addEventListener('keydown', controller.keyListenerDown, false);
 document.addEventListener('keyup', controller.keyListenerUp, false);
 
-score = document.getElementById('top-left');
+score = document.getElementById('top-right');
 highScore = document.getElementById('top-middle');
 title = document.getElementById('title');
 startBtn = document.getElementById('startBtn')
 instructions = document.getElementById('instructions');
+let intro = new Audio('assets/galaga-intro.mp4')
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
@@ -195,56 +180,39 @@ let start = startBtn.addEventListener('click', function () {
     title.style.display = 'none';
     instructions.style.display = 'none';
     start = true;
+    intro.play()
+    let spawnInterval = setInterval(spawn, 1000);
 })
+
 let runGame = setInterval(gameLoop, 60);
+let shootInterval = setInterval(moveMissile, 20);
 
-//width: 350, height: 600;
+let enemies = [];
+let enemySize = 25;
+let speed = 5;
+let enemyTotal = 30
 
-function moveEnemy() {
-    enemy.render()
-    if(enemy.x < 140)
-        enemy.x += 8;
-    if(enemy.y > 40)
-        enemy.y -= 8;
-    else if(enemy.y <= 40)
-    enemy.y -= 0.5;
 
-    enemy3.render()
-    if(enemy.y < 15)
-        enemy3.y += 7;
+function spawn() {
+    enemies.push({x:Math.random()*game.width, y:0}) 
 }
 
-function moveEnemy2() {
-    enemy2.render()
-    if(enemy2.x < 100)
-        enemy2.x += 8;
-    if(enemy2.y > 40)
-        enemy2.y -= 8;
-    else if(enemy2.y <= 40)
-        enemy2.y -= 0.5;
+function drawEnemy() {
+    for(let i = 0; i < enemies.length; i++) {
+        enemies[i].y += speed;
+        ctx.drawImage(enemy, enemies[i].x - enemySize/2, enemies[i].y - enemySize/2, enemySize, enemySize);
+        
+        //detects distance
+        let diff_x = Math.abs(enemies[i].x - hero.x);
+        let diff_y = Math.abs(enemies[i].y - hero.y);
+        let dist = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+        
+        //detects hit
+        if(dist < (hero.height + enemySize)/2 || hero.x < 0 || hero.x > 350
+        || hero.y < 0 || hero.y > 600)  {
+            enemies = [];
+            hero.x = hero.y = 550;
+        }
+    }   
 }
 
-function moveEnemy4() {
-    enemy4.render()
-    if(enemy4.x > 180)
-        enemy4.x -= 8;
-    if(enemy4.y > 40)
-        enemy4.y -= 8;
-    else if(enemy4.y <= 40)
-    enemy4.y -= 0.5;
-
-    enemy6.render()
-    if(enemy4.y < 15)
-        enemy6.y += 7;
-}
-
-
-function moveEnemy5() {
-    enemy5.render()
-    if(enemy5.x > 220)
-        enemy5.x -= 8;
-    if(enemy5.y > 40)
-        enemy5.y -= 8;
-    else if(enemy5.y <= 40)
-        enemy5.y -= 0.5;
-}

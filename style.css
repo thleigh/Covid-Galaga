@@ -109,9 +109,7 @@ canvas {
 }
 
 #top-left {
-    padding-top: 20px;
     grid-area: top-left;
-    display: none;
 }
 #top-middle {
     display: none;
@@ -119,6 +117,7 @@ canvas {
 
 #top-right {
     grid-area: top-right;
+    display: none;
 }
 
 main {
