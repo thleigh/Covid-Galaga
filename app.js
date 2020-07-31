@@ -85,7 +85,7 @@ controller = {
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
     // highScoreDisplay.textContent = `${hero.x}`;
-    scoreDisplay.textContent = scoreTotal;
+    scoreDisplay.textContent = `${scoreTotal}`;
     
     moveHero();
 
@@ -112,26 +112,31 @@ function moveHero() {
 let missileTotal = 10;
 let missiles = [];
 let scoreTotal = 0;
+let missileSize = 15;
 
 function drawMissile() {
     if(missiles.length)
         for(let i = 0; i < missiles.length; i++) {
-        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missileSize/2, missileSize);
     }
 }
 
 function detectMissileHit() {
-    for(let i = enemies.length - 1; i >= 0; i--) {
-        let diffX = Math.abs(enemies[i].x - missiles[i][0]);
-        let diffY = Math.abs(enemies[i].y - missiles[i][1]);
-        let dist = Math.sqrt(diffX * diffX + diffY * diffY)
 
-        if(dist < (missiles[i][3] + enemySize)/2) {
-            enemies.splice(i, 1);
-            score += 100;
+    for(let i = 0; i < missiles.length; i++) {
+        for(let e = enemies.length - 1; e >= 0; e--) {
+        let diffX = Math.abs(enemies[e].x - missiles[i][0]);
+        let diffY = Math.abs(enemies[e].y - missiles[i][1]);
+        let dist = Math.sqrt(diffX * diffX + diffY * diffY)
+            if(dist < (enemySize + missileSize) / 2)  {
+
+                enemies.splice(e, 1);
+                scoreTotal += 100;
+            }
         }
-    }
+    }   
 }
+
 
 function shootMissile() {
     moveMissile();
@@ -232,7 +237,6 @@ function drawEnemy() {
             hero.x = hero.y = 550;
             hero.alive = false;
             tryAgainBtn.style.display = 'block';
-            console.log(hero.alive)
         }
     }   
 }
