@@ -19,6 +19,7 @@ window.onload = function() {
     function loop () {
         ctx.drawImage(bg, 0, bgHeight);
         ctx.drawImage(bg, 0, bgHeight - game.height);
+        // New shapes are drawn behind the existing canvas content.
         ctx.globalCompositeOperation='destination-over';
         bgHeight += scrollSpeed;
 
@@ -127,9 +128,11 @@ function drawMissile() {
 function detectMissileHit() {
     for(let i = 0; i < missiles.length; i++) {
         for(let e = enemies.length - 1; e >= 0; e--) {
-        let diffX = Math.abs(enemies[e].x - missiles[i][0]);
-        let diffY = Math.abs(enemies[e].y - missiles[i][1]);
-        let dist = Math.sqrt(diffX * diffX + diffY * diffY);
+        //returns the absolute value of the enemy's width - the missile's width
+        let differenceX = Math.abs(enemies[e].x - missiles[i][0]);
+        //returns the absolute value of the enemy's height - the missile's height
+        let differenceY = Math.abs(enemies[e].y - missiles[i][1]);
+        let dist = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
             if(dist < (enemySize + missileSize) / 2)  {
                 enemies.splice(e, 1);
                 scoreTotal += 100;
@@ -197,6 +200,7 @@ tryAgainBtn = document.getElementById('tryAgain');
 let intro = new Audio('assets/galaga-intro.mp4');
 let oof = new Audio('assets/oof.mp4');
 let laser = new Audio('assets/missleSfx.mp4');
+intro.volume = 0.5;
 
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
@@ -243,9 +247,9 @@ function drawEnemy() {
         ctx.drawImage(enemy, enemies[i].x - enemySize/2, enemies[i].y - enemySize/2, enemySize, enemySize);
         
         //detects distance
-        let diffX = Math.abs(enemies[i].x - hero.x);
-        let diffY = Math.abs(enemies[i].y - hero.y);
-        let dist = Math.sqrt(diffX * diffX + diffY * diffY);
+        let differenceX = Math.abs(enemies[i].x - hero.x);
+        let differenceY = Math.abs(enemies[i].y - hero.y);
+        let dist = Math.sqrt(differenceX * differenceX + differenceY * differenceY);
         
         //detects hit
         if(dist < (hero.height + enemySize)/2 || hero.x < -10 || hero.x > 350
