@@ -45,7 +45,7 @@ A highlight for this step was creating a never-ending panning background using r
 ### Step 3
 In life, I always wished there was just one answer to my problems. In the same way, I wish there was one code to solve my coding problems. Hoevever, code is GREAT in that there are so many different ways to do the same thing. That is both a sarcastic statement and one of optimism. It's great knowing that I don't have to stick to one way of thinking!
 My next step was probably the most challenging: creating the game mechanics. 
-It took me about 5 hours to figure out/Googling (the problem with using Google is that there are a lot of answers. Too many sometimes. It's important to understand the concept of their code rather than just copying and pasting it because it won't necessarily work in your javascript) the right way to code a shooting function and another 2 hours unsuccessfully trying to reduce the fire rate. Below is part of the code that allowed me to execute it.
+It took me about 5 hours to figure out/Googling (the problem with using Google is that there are a lot of answers. Too many sometimes. It's important to understand the concept of their code rather than just copying and pasting it because it won't necessarily work in your javascript) the right way to code a shooting function and another 2 hours unsuccessfully trying to reduce the fire rate. Below is part of the code that allowed me to execute it. On top of that, it took a whole day just to figure out how I wanted to code the algorithms for the enemy's movements. Through hours and hours of Google searching, I found out that making an array and pushing new objects was the best way to create multiple of the same object!
 
 ```javascript
     let missileTotal = 10;
@@ -76,3 +76,43 @@ It took me about 5 hours to figure out/Googling (the problem with using Google i
     missile.src = 'assets/missile.png'  
 ```
 
+```javascript
+    let enemies = [];
+    let enemySize = 25;
+    let speed = 5;
+
+    function spawn() {
+        enemies.push({x:Math.random()*game.width, y:-20}) 
+    }
+
+    function drawEnemy() {
+        for(let i = 0; i < enemies.length; i++) {
+            enemies[i].y += speed;
+            ctx.drawImage(enemy, enemies[i].x - enemySize/2, enemies[i].y - enemySize/2, enemySize, enemySize);
+        }
+    }
+```
+
+### Step 4 
+Step 4 is kind of an extention to step 3. After coding the enemies and missiles, I had to code the win/lose condition, when the enemy hits the player and when the missiles hit the enemies. This is where the real math took place. To figure out how to detect the hit, I was lucky enough to have a game that was linear. You'd only get hit from the top of the ship or from the top of the missile. 
+
+```javascript
+    if(dist < (hero.height + enemySize)/2 || hero.x < -10 || hero.x > 350
+        || hero.y < 0 || hero.y > 600)  {
+            enemies = [];
+            hero.x = hero.y = 550;
+            hero.alive = false;
+            tryAgainBtn.style.display = 'block';
+            score.style.display = 'none';
+            highScore.style.display = 'none';
+            oof.play();
+    }
+```
+
+![Image of my Overlay](./assets/enemy3.png) ![Image of my Overlay](./assets/ship.png)
+
+## Conclusion
+I had a lot of fun making this game and I learned a lot about myself as a coder and my habits as a person. Everyday and night possibilities for solutions would run through my head. I'm excited to say that I've never really felt a passion like this before in my life. 
+With that being said, I could not do everything perfectly. I soon realized when starting this project that Galaga is a lot more complex than I thought. The enemy animations are all thoroughly routed and was just something that I didn't have the time or ability to complete. However, something practical that I could have done better was using sprite sheets. I definitely tried in the beginning but gave up because it would take too much trial and error.
+I definitely wanted to add more features like a ranking board and just more sound effects in general.
+I am proud of my work and I want to celebrate the wins in this, but I know that I can always improve and am always trying to learn from my faults!

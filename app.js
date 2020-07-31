@@ -44,11 +44,13 @@ function Crawler(x, y, width, height, image) {
         }
 }
 
+//to detect key presses
 controller = {
     left: false,
     rigth: false,
     shoot: false,
 
+    //detects key down
     keyListenerDown: function(e) {
             let key_state = (event.type == "keydown")?true:false;
             
@@ -65,6 +67,7 @@ controller = {
         }
     },
 
+    //detects when key is released
     keyListenerUp: function(e) {
         let key_state = (event.type == "keyup")?false:true;
         
@@ -84,7 +87,6 @@ controller = {
 
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
-    // highScoreDisplay.textContent = `${hero.x}`;
     scoreDisplay.textContent = `${scoreTotal}`;
     
     moveHero();
@@ -94,7 +96,12 @@ const gameLoop = () => {
     drawEnemy();
 
     detectMissileHit();
+
+    let end = tryAgainBtn.addEventListener('click', function() {
+        tryAgainBtn.style.display = 'none';
+    })
 }
+
 function moveHero() {
     if (controller.left && hero.x > 0) {
         xVel -= 6;
@@ -122,7 +129,6 @@ function drawMissile() {
 }
 
 function detectMissileHit() {
-
     for(let i = 0; i < missiles.length; i++) {
         for(let e = enemies.length - 1; e >= 0; e--) {
         let diffX = Math.abs(enemies[e].x - missiles[i][0]);
@@ -132,11 +138,11 @@ function detectMissileHit() {
 
                 enemies.splice(e, 1);
                 scoreTotal += 100;
+                // oof.play();
             }
         }
     }   
 }
-
 
 function shootMissile() {
     moveMissile();
@@ -145,6 +151,7 @@ function shootMissile() {
     if (controller.shoot && missiles.length <= missileTotal) {
         missiles.push([hero.x + 20, hero.y - 20, 5, 15])
     }  
+    laser.play();
 }
 
 const moveMissile = () => { 
@@ -193,6 +200,8 @@ startBtn = document.getElementById('startBtn')
 instructions = document.getElementById('instructions');
 tryAgainBtn = document.getElementById('tryAgain');
 let intro = new Audio('assets/galaga-intro.mp4')
+let oof = new Audio('assets/oof.mp4')
+let laser = new Audio('assets/missileSfx.mp4')
 
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
@@ -203,10 +212,6 @@ let start = startBtn.addEventListener('click', function () {
     start = true;
     intro.play()
     let spawnInterval = setInterval(spawn, 1000);
-})
-
-let end = tryAgainBtn.addEventListener('click', function() {
-    tryAgainBtn.style.display = 'none';
 })
 
 let runGame = setInterval(gameLoop, 60);
@@ -237,11 +242,9 @@ function drawEnemy() {
             hero.x = hero.y = 550;
             hero.alive = false;
             tryAgainBtn.style.display = 'block';
+            score.style.display = 'none';
+            highScore.style.display = 'none';
+            oof.play();
         }
     }   
 }
-
-function gameOver() {
-
-}
-
