@@ -85,13 +85,15 @@ controller = {
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height);
     // highScoreDisplay.textContent = `${hero.x}`;
-    scoreDisplay.textContent = '0';
+    scoreDisplay.textContent = scoreTotal;
     
     moveHero();
 
     shootMissile();
 
     drawEnemy();
+
+    detectMissileHit();
 }
 function moveHero() {
     if (controller.left && hero.x > 0) {
@@ -109,12 +111,26 @@ function moveHero() {
 
 let missileTotal = 10;
 let missiles = [];
+let scoreTotal = 0;
 
 function drawMissile() {
-        if(missiles.length)
-            for(let i = 0; i < missiles.length; i++) {
-            ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+    if(missiles.length)
+        for(let i = 0; i < missiles.length; i++) {
+        ctx.drawImage(missile, missiles[i][0], missiles[i][1], missiles[i][2], missiles[i][3]);
+    }
+}
+
+function detectMissileHit() {
+    for(let i = enemies.length - 1; i >= 0; i--) {
+        let diffX = Math.abs(enemies[i].x - missiles[i][0]);
+        let diffY = Math.abs(enemies[i].y - missiles[i][1]);
+        let dist = Math.sqrt(diffX * diffX + diffY * diffY)
+
+        if(dist < (missiles[i][3] + enemySize)/2) {
+            enemies.splice(i, 1);
+            score += 100;
         }
+    }
 }
 
 function shootMissile() {
@@ -127,16 +143,14 @@ function shootMissile() {
 }
 
 const moveMissile = () => { 
-    // let missileInterval = setInterval(() => {
-        for(let i = 0; i < missiles.length; i++) {
-            if(missiles[i][1] > -11) {
-                missiles[i][1] -= 5;
+    for(let i = 0; i < missiles.length; i++) {
+        if(missiles[i][1] > -11) {
+            missiles[i][1] -= 5;
                 
-            } else if (missiles[i][1] < -10) {
-                missiles.splice(i, 1);
-            }
+        } else if (missiles[i][1] < -10) {
+            missiles.splice(i, 1);
         }
-    // }, 100)
+    }
 }
 
 //DOM REFS
@@ -172,7 +186,9 @@ highScore = document.getElementById('top-middle');
 title = document.getElementById('title');
 startBtn = document.getElementById('startBtn')
 instructions = document.getElementById('instructions');
+tryAgainBtn = document.getElementById('tryAgain');
 let intro = new Audio('assets/galaga-intro.mp4')
+
 let start = startBtn.addEventListener('click', function () {
     score.style.display = 'block';
     highScore.style.display = 'block';
@@ -184,17 +200,19 @@ let start = startBtn.addEventListener('click', function () {
     let spawnInterval = setInterval(spawn, 1000);
 })
 
+let end = tryAgainBtn.addEventListener('click', function() {
+    tryAgainBtn.style.display = 'none';
+})
+
 let runGame = setInterval(gameLoop, 60);
 let shootInterval = setInterval(moveMissile, 20);
 
 let enemies = [];
 let enemySize = 25;
 let speed = 5;
-let enemyTotal = 30
-
 
 function spawn() {
-    enemies.push({x:Math.random()*game.width, y:0}) 
+    enemies.push({x:Math.random()*game.width, y:-20}) 
 }
 
 function drawEnemy() {
@@ -203,16 +221,23 @@ function drawEnemy() {
         ctx.drawImage(enemy, enemies[i].x - enemySize/2, enemies[i].y - enemySize/2, enemySize, enemySize);
         
         //detects distance
-        let diff_x = Math.abs(enemies[i].x - hero.x);
-        let diff_y = Math.abs(enemies[i].y - hero.y);
-        let dist = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+        let diffX = Math.abs(enemies[i].x - hero.x);
+        let diffY = Math.abs(enemies[i].y - hero.y);
+        let dist = Math.sqrt(diffX * diffX + diffY * diffY);
         
         //detects hit
-        if(dist < (hero.height + enemySize)/2 || hero.x < 0 || hero.x > 350
+        if(dist < (hero.height + enemySize)/2 || hero.x < -10 || hero.x > 350
         || hero.y < 0 || hero.y > 600)  {
             enemies = [];
             hero.x = hero.y = 550;
+            hero.alive = false;
+            tryAgainBtn.style.display = 'block';
+            console.log(hero.alive)
         }
     }   
+}
+
+function gameOver() {
+
 }
 

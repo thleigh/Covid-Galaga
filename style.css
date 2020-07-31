@@ -81,7 +81,31 @@ canvas {
 #startBtn:hover {
     color: rgb(255, 82, 82);
 }
+
+#tryAgain {
+    display: none;
+    border: none;
+    background: none;
+    font-family: 'Press Start 2P', monospace;
+    color: rgb(255, 0, 0);
+    font-size: 30px;
+    position: absolute;
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+    width: 100%;
+}
   
+#tryAgain:focus {outline:0;}
+
+#tryAgain:hover {
+    color: rgb(255, 82, 82);
+}
+
 #container {
     width: 350px;
     background-color: black;
